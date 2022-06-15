@@ -1,0 +1,19 @@
+ *************** REACT JS *************************
+
+
+ -->Components = user interfaces
+ -->Root component, component tree
+ -->Independence
+ -->Resusability
+ -->Speed
+
+ Structure 
+
+ --> Dev Environment
+ --> Tutorial
+ --> Projects
+ --> Redux
+
+ all our application will live in that one div with an id of Root
+
+ --- First React component ---
