@@ -17,3 +17,281 @@
  all our application will live in that one div with an id of Root
 
  --- First React component ---
+
+ //jshint esversion:6
+import React from "react"; //es6 modules --> piece of functionality into our code 
+import ReactDom from "react-dom"; // contains the render method
+
+
+//staeless functional component
+//always return JSX
+
+/*
+JSX Rules -->
+
+-> return a single element
+-> div/section/article or Fragment
+-> use camelCase for html attribute
+-> className instead of class
+-> close every element 
+-> formatting
+
+*/
+function Greeting(){// captitalize the name --> react knows that this is a component
+  return (
+    <div>
+      <h2>Debj</h2>
+      <p>This is my message</p>
+    </div>
+  );
+}
+
+// const Greeting = ()=>{
+
+//   return React.createElement('div', {}, React.createElement('h1', {}, 'Hello')) // looks for element type, props object and chidlren
+// }
+
+ReactDom.render(<Greeting/>, document.getElementById('root')) // looking for what we want to render and where
+
+// we need to self close or two tags like <Greeting></Greeting>
+
+
+---------------------------------------------------
+
+nested components : 
+
+function Greeting(){
+  return (
+    <div> 
+      <Person/>
+      <Message/>
+    </div>
+  );
+}
+
+const Person = () => <h2>Debj</h2>
+
+const Message = () =>{
+  return <p>This is my message</p>
+}
+
+
+----styling----
+
+import './index.css'
+
+
+---- adding inline styles ----
+
+const Author = () => <h4 style={{color:'#617d98', fontSize:'0.75rem', margin:'0.25rem'}}>HC Verma</h4> // if we want to access js world in jsx, we need to use {} 
+// we need to have all the values as javascript object and all the values as javascript values
+
+
+
+---- props object ----
+
+<Book job='developer'/>
+<Book title='ranom title' number={22}/>
+
+const Book = (props) =>{
+    return (
+        <h1>{props.title}</h1>
+        <h2>{props.job}</h2>
+        <h3>{props.number}</h3>
+    );
+}
+
+
+--------- FINISHED CODE WITH TWO BOOKS TILL 2:26:04 -------------
+
+import React from "react";
+import ReactDom from "react-dom";
+
+//CSS
+
+import './index.css'
+
+//setup vars
+const firstBook = {
+  img: "https://images-eu.ssl-images-amazon.com/images/I/91rasc9GEgL._AC_UL604_SR604,400_.jpg",
+  title: "Concepts of Physics",
+  author: "HC Verma"
+}
+
+const secondBook = {
+  img: "https://images-na.ssl-images-amazon.com/images/I/813uPMOnskL.jpg",
+  title: "YOU CAN",
+  author: "George Mathhew Adams"
+}
+
+function BookList(){
+  return (
+    <section className="booklist">
+      <Book img={firstBook.img}
+            title={firstBook.title}
+            author={firstBook.author}/>
+      <Book img={secondBook.img}
+            title={secondBook.title}
+            author={secondBook.author}/>
+    </section>
+  );
+}
+
+const Book = (props) =>{
+  return <article className="book">
+    <img src={props.img} alt="" className="bookimg" />
+    <h1>{props.title}</h1>
+    <h4>{props.author}</h4>  
+    {/* the javascript has to be an expression, not a statement */}
+  </article>
+}
+
+/*
+                Alternatives 
+
+
+    const Book = ({img, title,author}) =>{}
+
+                    OR
+
+    const {img, title, author} = props;
+
+
+
+*/
+
+
+ReactDom.render(<BookList/>, document.getElementById('root'))
+
+
+--------------------------------------------------------------------
+
+
+
+
+                    <--chidlren-->
+
+
+suppose you want to add a property to only one React Object :: 
+
+// learn till props -- 2:36:29
+
+
+---- SIMPLE LIST -----
+
+in react we can render an array but that array cannot rightaway be objects
+
+const names = ['jon', 'peter', 'susane']
+
+const newName = names.map((name)=>{
+
+  return <h1>{name}</h1>
+})
+
+function BookList(){
+  return (
+    <section className="booklist">
+      {newName}
+    </section>
+  );
+}
+
+
+in the above logic, we map the names array element to another newName array which has
+the objects as h1 elements, so we can return that to the booklist component
+
+
+-- returning a component for each iteration -- 
+
+
+
+for the properties of each object we can use either of these 3 methods :
+
+Method 1 : passing the prop object properties individually
+
+
+function BookList(){
+  return (
+    <section className="booklist">
+        {books.map((book)=>{
+          const {img, title, author} =book;
+          return <Book img={img} title={title} author={author}/>
+        })}
+    </section>
+  );
+}
+
+const Book = (props) =>{
+
+  const {img, title, author} = props;
+  return(
+  <article className="book">
+    <img src={img} alt="" className="bookimg" />
+    <h1>{title}</h1>
+    <h4>{author}</h4>
+    {/* the javascript has to be an expression, not a statement */}
+  </article>
+  )
+}
+
+
+Method 2 : passing the object entirely as an object
+
+function BookList(){
+  return (
+    <section className="booklist">
+        {books.map((book)=>{
+          const {img, title, author} =book;
+          return <Book book={book}/>
+        })}
+    </section>
+  );
+}
+
+const Book = (props) =>{
+
+  const {img, title, author} = props.book;
+  return(
+  <article className="book">
+    <img src={img} alt="" className="bookimg" />
+    <h1>{title}</h1>
+    <h4>{author}</h4>
+    {/* the javascript has to be an expression, not a statement */}
+  </article>
+  )
+}
+
+// unique key prob fix
+
+reacts wants to keep a track of what we are adding and what we are removing 
+in order to do that we need to add a special key prop
+
+Method 3 : Spread operator ({...objectName})
+
+function BookList(){
+  return(
+
+    <section>
+      {books.map((book)=>{
+        return <Book key={book.id} {...book}/> <!-- which means we pass each property of the book object-->
+      })}
+    </section>
+  )
+
+}
+
+const Book = (props) =>{
+
+  const {img, title, author} = props;
+
+
+  ...............
+  ..........
+  ....
+
+
+
+}
+
+********** EVENTS ***********
+

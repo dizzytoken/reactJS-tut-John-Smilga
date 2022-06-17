@@ -1,11 +1,23 @@
-import React from "react"; //es6 modules --> piece of functionality into our code 
-import ReactDom from "react-dom"; // contains the render method
+import React from "react";
+import ReactDom from "react-dom";
 
-function Greeting(){// captitalize the name --> react knows that this is a component
-  return <h4>this is debj and this is first component</h4>
+//CSS
+
+import './index.css'
+
+//setup vars
+import {books} from './books' // names need to match exactly // named export
+import Book from "./Book"; // default exports , names can be anything 
+function BookList(){
+  return (
+    <section className="booklist">
+      {books.map((book)=>{
+        return <Book key={book.id} {...book}/>
+      })}
+    </section>
+  )
 }
 
 
-ReactDom.render(<Greeting/>, document.getElementById('root')) // looking for what we want to render and where
+ReactDom.render(<BookList/>, document.getElementById('root'))
 
-// we need to self close or two tags like <Greeting></Greeting>
